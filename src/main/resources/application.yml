@@ -1,2 +1,15 @@
 server:
   port: 65535
+
+spring:
+  rabbitmq:
+    host: 82.157.63.191
+    port: 5672
+    username: rabbit
+    password: 123456
+    #    NONE禁用发布确认模式、
+    #    CORRELATED 发布到交换机之后触发回调 一般使用这种
+    #    SIMPLE 同步确认消息/以及异步确认两种
+    publisher-confirm-type: correlated
+    #    消息不可路由的时候需要通知生产者
+    publisher-returns: true
