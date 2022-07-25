@@ -1,6 +1,7 @@
 package com.SmallThanks.demo.Util;
 
-import com.SmallThanks.demo.config.DelayedQueueConfig;
+import com.SmallThanks.demo.mqConsumer.receiveMessage;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +16,15 @@ public class SendMQMessageUtil {
 
 
     public void sendDelayMessage(String message, long ttl) {
-        rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME,
-                DelayedQueueConfig.DELAYED_QUEUE_NAME,
+        rabbitTemplate.convertAndSend(
+                receiveMessage.DELAYED_EXCHANGE_NAME,
+                receiveMessage.DELAYED_QUEUE_NAME,
                 message,
                 msg -> {
                     msg.getMessageProperties().setDelay((int)ttl);
+                    msg.getMessageProperties().setExpiration("5");
                     return msg;
-                });
+                },
+                new CorrelationData("123"));
     }
 }
